@@ -1,14 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { Provider } from 'react-redux'
-import store from './app/store.js'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import App from "./App";
+import store from "./app/store";
+import { loadUser } from "./features/auth/auth.slice";
+import "./index.css"; // ✅ bas itna hi
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+store.dispatch(loadUser()); // 🔥 AUTO AUTH RESTORE
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
     <Provider store={store}>
-    <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
-  </StrictMode>,
-)
+  </React.StrictMode>
+);

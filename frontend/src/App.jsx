@@ -1,30 +1,54 @@
-import { useDispatch, useSelector } from "react-redux";
-import { authSuccess } from "./features/auth/auth.slice";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import RoleRoute from "./routes/RoleRoute";
+import PublicRoute from "./routes/PublicRoute";
+import { ROLES } from "./features/auth/auth.types";
+
+import LoginPage from "./pages/auth/Login.page";
+
+import UserLayout from "./layouts/UserLayout";
+import ProviderLayout from "./layouts/ProviderLayout";
+import AdminLayout from "./layouts/AdminLayout";
+
+import UserDashboard from "./pages/user/UserDashboard.page";
+import ProviderDashboard from "./pages/provider/ProviderDashboard.page";
+import AdminDashboard from "./pages/admin/AdminDashboard.page";
 
 const App = () => {
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
-
   return (
-    <div className="p-10">
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={() =>
-          dispatch(
-            authSuccess({
-              user: { name: "Test User" },
-              role: "USER",
-            })
-          )
-        }
-      >
-        Login Test
-      </button>
+    <Routes>
+      {/* ROOT */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
-      <pre className="mt-4 bg-gray-100 p-4 rounded">
-        {JSON.stringify(auth, null, 2)}
-      </pre>
-    </div>
+      {/* PUBLIC (login) */}
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+
+      {/* PROTECTED */}
+      <Route element={<ProtectedRoute />}>
+        {/* USER */}
+        <Route element={<RoleRoute allowedRoles={[ROLES.USER]} />}>
+          <Route path="/user" element={<UserLayout />}>
+            <Route path="dashboard" element={<UserDashboard />} />
+          </Route>
+        </Route>
+
+        {/* PROVIDER */}
+        <Route element={<RoleRoute allowedRoles={[ROLES.PROVIDER]} />}>
+          <Route path="/provider" element={<ProviderLayout />}>
+            <Route path="dashboard" element={<ProviderDashboard />} />
+          </Route>
+        </Route>
+
+        {/* ADMIN */}
+        <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+          </Route>
+        </Route>
+      </Route>
+    </Routes>
   );
 };
 
