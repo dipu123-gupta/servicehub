@@ -3,10 +3,13 @@ import authReducer from "../features/auth/auth.slice";
 import bookingReducer from "../features/bookings/booking.slice";
 import providerJobsReducer from "../features/providerJobs/providerJobs.slice";
 import adminReducer from "../features/admin/admin.slice";
-const rootReducer = combineReducers({
+import invoiceReducer from "../features/invoice/invoice.slice";
+import walletReducer from "../features/wallet/wallet.slice";
+export default combineReducers({
   auth: authReducer,
   bookings: bookingReducer,
   providerJobs: providerJobsReducer,
-  admin: adminReducer
+  admin: adminReducer,
+   invoice:invoiceReducer,
+   wallet: walletReducer,
 });
-export default rootReducer;

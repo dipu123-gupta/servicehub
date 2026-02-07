@@ -1,16 +1,28 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { ROLES } from "../features/auth/auth.types";
+import Sidebar from "../components/Sidebar";
 
 const AdminLayout = () => {
   return (
-    <>
-      <Navbar role={ROLES.ADMIN} />
+    <div className="flex min-h-screen">
+      <Sidebar
+        title="Admin Panel"
+        links={[
+          { label: "Dashboard", to: "/admin/dashboard" },
+          { label: "Users", to: "/admin/users" },
+          { label: "Providers", to: "/admin/providers" },
+          { label: "Payments", to: "/admin/payments" },
+          { label: "Withdraw Requests", to: "/admin/withdraws" },
+        ]}
+      />
 
-      <main className="p-6 bg-gray-100 min-h-screen">
-        <Outlet />
-      </main>
-    </>
+      <div className="flex-1">
+        <Navbar role="ADMIN" />
+        <main className="p-6 bg-base-100 min-h-screen">
+          <Outlet />
+        </main>
+      </div>
+    </div>
   );
 };
 

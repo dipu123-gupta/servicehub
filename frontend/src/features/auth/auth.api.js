@@ -10,7 +10,6 @@ export const logoutApi = async () => {
   return res.data;
 };
 
-/* 🔥 NEW: LOAD USER FROM COOKIE */
 export const loadUserApi = async () => {
   const res = await api.get("/auth/me");
   return res.data;

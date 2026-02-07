@@ -10,7 +10,7 @@ export const loadUser = createAsyncThunk(
     } catch {
       return rejectWithValue();
     }
-  },
+  }
 );
 
 /* LOGIN */
@@ -22,28 +22,28 @@ export const loginUser = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  },
+  }
 );
 
 /* LOGOUT */
-export const logoutUser = createAsyncThunk("auth/logout", async () => {
-  await logoutApi();
-});
-
-const initialState = {
-  role: null,
-  isAuthenticated: false,
-  loading: true, // 🔥 important
-  error: null,
-};
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async () => {
+    await logoutApi();
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: {
+    role: null,
+    isAuthenticated: false,
+    loading: true,
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      /* LOAD USER */
       .addCase(loadUser.pending, (state) => {
         state.loading = true;
       })
@@ -57,23 +57,11 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.role = null;
       })
-
-      /* LOGIN */
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
         state.role = action.payload.role;
       })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      /* LOGOUT */
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.role = null;

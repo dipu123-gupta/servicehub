@@ -3,18 +3,27 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleRoute from "./routes/RoleRoute";
 import PublicRoute from "./routes/PublicRoute";
 import { ROLES } from "./features/auth/auth.types";
-
 import LoginPage from "./pages/auth/Login.page";
-
 import UserLayout from "./layouts/UserLayout";
 import ProviderLayout from "./layouts/ProviderLayout";
 import AdminLayout from "./layouts/AdminLayout";
-
 import UserDashboard from "./pages/user/UserDashboard.page";
 import ProviderDashboard from "./pages/provider/ProviderDashboard.page";
 import AdminDashboard from "./pages/admin/AdminDashboard.page";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { loadUser } from "./features/auth/auth.slice";
+import BookingDetailPage from "./pages/user/BookingDetail.page.jsx";
+import ProviderWallet from "./pages/provider/ProviderWallet.page.jsx";
+import AdminWithdrawsPage from "./pages/admin/AdminWithdraws.page.jsx";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
   return (
     <Routes>
       {/* ROOT */}
@@ -31,6 +40,8 @@ const App = () => {
         <Route element={<RoleRoute allowedRoles={[ROLES.USER]} />}>
           <Route path="/user" element={<UserLayout />}>
             <Route path="dashboard" element={<UserDashboard />} />
+            <Route path="bookings/:id" element={<BookingDetailPage />} />{" "}
+            {/* ✅ */}
           </Route>
         </Route>
 
@@ -38,6 +49,7 @@ const App = () => {
         <Route element={<RoleRoute allowedRoles={[ROLES.PROVIDER]} />}>
           <Route path="/provider" element={<ProviderLayout />}>
             <Route path="dashboard" element={<ProviderDashboard />} />
+            <Route path="/provider/wallet" element={<ProviderWallet />} />
           </Route>
         </Route>
 
@@ -45,6 +57,8 @@ const App = () => {
         <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/withdraws" element={<AdminWithdrawsPage />} />
+
           </Route>
         </Route>
       </Route>
