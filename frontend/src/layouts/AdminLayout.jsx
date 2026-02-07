@@ -15,7 +15,6 @@ const AdminLayout = () => {
           { label: "Withdraw Requests", to: "/admin/withdraws" },
         ]}
       />
-
       <div className="flex-1">
         <Navbar role="ADMIN" />
         <main className="p-6 bg-base-100 min-h-screen">

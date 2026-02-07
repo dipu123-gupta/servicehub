@@ -8,7 +8,7 @@ import {
 
 const AdminWithdrawsPage = () => {
   const dispatch = useDispatch();
-  const { withdraws, loading } = useSelector((s) => s.admin);
+  const { withdraws=[], loading } = useSelector((s) => s.admin);
 
   useEffect(() => {
     dispatch(fetchWithdraws());

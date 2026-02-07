@@ -1,5 +1,73 @@
+// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// import { getWalletApi, withdrawRequestApi } from "./wallet.api";
+
+// /* THUNKS */
+// export const fetchWallet = createAsyncThunk(
+//   "wallet/fetch",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       return await getWalletApi();
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message);
+//     }
+//   }
+// );
+
+// export const withdrawAmount = createAsyncThunk(
+//   "wallet/withdraw",
+//   async (amount, { rejectWithValue }) => {
+//     try {
+//       return await withdrawRequestApi(amount);
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message);
+//     }
+//   }
+// );
+
+// const walletSlice = createSlice({
+//   name: "wallet",
+//   initialState: {
+//     balance: 0,
+//     commission: 0,
+//     providerAmount: 0,
+//     withdrawable: 0,
+//     loading: false,
+//     error: null,
+//   },
+//   reducers: {},
+//   extraReducers: (b) => {
+//     b.addCase(fetchWallet.pending, (s) => {
+//       s.loading = true;
+//     })
+//       .addCase(fetchWallet.fulfilled, (s, a) => {
+//         s.loading = false;
+//         Object.assign(s, a.payload);
+//       })
+//       .addCase(fetchWallet.rejected, (s, a) => {
+//         s.loading = false;
+//         s.error = a.payload;
+//       })
+//       .addCase(withdrawAmount.pending, (s) => {
+//         s.loading = true;
+//       })
+//       .addCase(withdrawAmount.fulfilled, (s) => {
+//         s.loading = false;
+//       })
+//       .addCase(withdrawAmount.rejected, (s, a) => {
+//         s.loading = false;
+//         s.error = a.payload;
+//       });
+//   },
+// });
+
+// export default walletSlice.reducer;
+
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWalletApi, withdrawRequestApi } from "./wallet.api";
+import {
+  getWalletApi,
+  withdrawRequestApi,
+} from "./wallet.api";
 
 /* FETCH WALLET */
 export const fetchWallet = createAsyncThunk(
@@ -7,20 +75,20 @@ export const fetchWallet = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       return await getWalletApi();
-    } catch (e) {
-      return rejectWithValue(e.response?.data?.message);
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
     }
   }
 );
 
 /* WITHDRAW */
-export const withdrawAmount = createAsyncThunk(
+export const withdrawRequest = createAsyncThunk(
   "wallet/withdraw",
   async (amount, { rejectWithValue }) => {
     try {
       return await withdrawRequestApi(amount);
-    } catch (e) {
-      return rejectWithValue(e.response?.data?.message);
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
     }
   }
 );
@@ -51,8 +119,8 @@ const walletSlice = createSlice({
         s.loading = false;
         s.error = a.payload;
       })
-      .addCase(withdrawAmount.fulfilled, (s) => {
-        s.success = "Withdraw request sent for admin approval";
+      .addCase(withdrawRequest.fulfilled, (s) => {
+        s.success = "Withdraw request submitted for admin approval";
       });
   },
 });

@@ -11,3 +11,5 @@ export const withdrawRequestApi = async (amount) => {
   const res = await api.post("/wallet/withdraw", { amount });
   return res.data;
 };
+
+

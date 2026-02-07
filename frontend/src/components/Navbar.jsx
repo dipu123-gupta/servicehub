@@ -9,9 +9,10 @@ const Navbar = ({ role }) => {
       <h1 className="text-lg font-semibold">LocalServesHub</h1>
 
       <div className="flex items-center gap-4">
-        <span className="px-3 py-1 bg-blue-600 rounded text-sm">
-          {role}
-        </span>
+        <span className="px-3 py-1 bg-blue-600 rounded text-sm">{role}</span>
+        <a href="/notifications" className="btn btn-ghost btn-circle">
+          🔔
+        </a>
 
         <button
           onClick={() => dispatch(logoutUser())}

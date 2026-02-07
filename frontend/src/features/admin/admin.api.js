@@ -45,18 +45,20 @@ export const refundPaymentApi = async (paymentId) => {
   return res.data;
 };
 
-/* WITHDRAW */
-export const getWithdrawRequestsApi = async () => {
-  const res = await api.get("/admin/withdraw-requests");
+/* PAYMENTS */
+
+export const getRevenueApi = async () => {
+  const res = await api.get("/admin/revenue");
   return res.data;
 };
 
-export const approveWithdrawApi = async (id) => {
-  const res = await api.post(`/admin/withdraw-requests/${id}/approve`);
+export const getCommissionApi = async () => {
+  const res = await api.get("/admin/commissions");
   return res.data;
 };
 
-export const rejectWithdrawApi = async (id) => {
-  const res = await api.post(`/admin/withdraw-requests/${id}/reject`);
+export const getTransactionsApi = async () => {
+  const res = await api.get("/admin/transactions");
   return res.data;
 };
+

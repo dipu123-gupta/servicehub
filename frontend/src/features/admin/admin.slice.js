@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "./admin.api";
+import {
+  getPaymentsApi,
+  getRevenueApi,
+  getCommissionApi,
+  getTransactionsApi,
+} from "./admin.api";
+
 
 /* ================= THUNKS ================= */
 
@@ -31,34 +38,43 @@ export const verifyProvider = createAsyncThunk(
   async (id) => api.verifyProviderApi(id)
 );
 
-// Withdraws
-export const fetchWithdraws = createAsyncThunk(
-  "admin/withdraws",
-  async () => api.getWithdrawRequestsApi()
+export const fetchPayments = createAsyncThunk(
+  "admin/payments",
+  getPaymentsApi
 );
 
-export const approveWithdraw = createAsyncThunk(
-  "admin/approveWithdraw",
-  async (id) => api.approveWithdrawApi(id)
+export const fetchRevenue = createAsyncThunk(
+  "admin/revenue",
+  getRevenueApi
 );
 
-export const rejectWithdraw = createAsyncThunk(
-  "admin/rejectWithdraw",
-  async (id) => api.rejectWithdrawApi(id)
+export const fetchCommission = createAsyncThunk(
+  "admin/commission",
+  getCommissionApi
 );
+
+export const fetchTransactions = createAsyncThunk(
+  "admin/transactions",
+  getTransactionsApi
+);
+
 
 /* ================= SLICE ================= */
 
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
-    stats: null,
-    users: [],
-    providers: [],
-    withdraws: [],
-    loading: false,
-    error: null,
-  },
+  stats: null,
+  users: [],
+  providers: [],
+  payments: [],      // ✅ ADD
+  revenue: null,     // ✅ ADD
+  commission: null,  // ✅ ADD
+  transactions: [],  // ✅ ADD
+  withdraws: [],
+  loading: false,
+},
+
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -89,21 +105,6 @@ const adminSlice = createSlice({
           p._id === action.payload.provider._id
             ? action.payload.provider
             : p
-        );
-      })
-
-      /* ================= WITHDRAWS ================= */
-      .addCase(fetchWithdraws.fulfilled, (state, action) => {
-        state.withdraws = action.payload.withdraws;
-      })
-      .addCase(approveWithdraw.fulfilled, (state, action) => {
-        state.withdraws = state.withdraws.filter(
-          (w) => w._id !== action.payload.withdraw._id
-        );
-      })
-      .addCase(rejectWithdraw.fulfilled, (state, action) => {
-        state.withdraws = state.withdraws.filter(
-          (w) => w._id !== action.payload.withdraw._id
         );
       })
 

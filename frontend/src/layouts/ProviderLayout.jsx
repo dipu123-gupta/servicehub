@@ -12,9 +12,9 @@ const ProviderLayout = () => {
           { label: "Jobs", to: "/provider/jobs" },
           { label: "Wallet", to: "/provider/wallet" },
           { label: "Profile", to: "/provider/profile" },
+          { label: "Job History", to: "/provider/history" },
         ]}
       />
-
       <div className="flex-1">
         <Navbar role="PROVIDER" />
         <main className="p-6 bg-base-100 min-h-screen">

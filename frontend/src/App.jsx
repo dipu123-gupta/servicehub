@@ -14,8 +14,11 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { loadUser } from "./features/auth/auth.slice";
 import BookingDetailPage from "./pages/user/BookingDetail.page.jsx";
-import ProviderWallet from "./pages/provider/ProviderWallet.page.jsx";
-import AdminWithdrawsPage from "./pages/admin/AdminWithdraws.page.jsx";
+import WalletPage from "./pages/provider/Wallet.page.jsx";
+import NotificationsPage from "./pages/common/Notifications.page.jsx";
+import WithdrawRequestsPage from "./pages/admin/WithdrawRequests.page.jsx";
+import JobHistoryPage from "./pages/provider/JobHistory.page.jsx";
+import PaymentsPage from "./pages/admin/Payments.page.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -36,6 +39,8 @@ const App = () => {
 
       {/* PROTECTED */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/notifications" element={<NotificationsPage/>} />
+
         {/* USER */}
         <Route element={<RoleRoute allowedRoles={[ROLES.USER]} />}>
           <Route path="/user" element={<UserLayout />}>
@@ -49,7 +54,9 @@ const App = () => {
         <Route element={<RoleRoute allowedRoles={[ROLES.PROVIDER]} />}>
           <Route path="/provider" element={<ProviderLayout />}>
             <Route path="dashboard" element={<ProviderDashboard />} />
-            <Route path="/provider/wallet" element={<ProviderWallet />} />
+            <Route path="/provider/wallet" element={<WalletPage />} />
+            <Route path="/provider/history" element={<JobHistoryPage />} />
+
           </Route>
         </Route>
 
@@ -57,7 +64,9 @@ const App = () => {
         <Route element={<RoleRoute allowedRoles={[ROLES.ADMIN]} />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/withdraws" element={<AdminWithdrawsPage />} />
+            <Route path="/admin/withdraws" element={<WithdrawRequestsPage />} />
+            <Route path="wallet" element={<WalletPage />} />
+            <Route path="/admin/payments" element={<PaymentsPage />} />
 
           </Route>
         </Route>

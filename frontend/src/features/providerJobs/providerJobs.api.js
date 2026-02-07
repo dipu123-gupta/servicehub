@@ -24,3 +24,17 @@ export const completeJobApi = async (id) => {
   const res = await api.post(`/provider/bookings/complete/${id}`);
   return res.data;
 };
+
+export const rejectJobApi = async (id) => {
+  const res = await api.post(`/provider/bookings/reject/${id}`);
+  return res.data;
+};
+
+// ✅ JOB HISTORY
+export const getProviderJobHistoryApi = async () => {
+  const res = await api.get("/provider/bookings/history");
+  return res.data;
+};
+
+
+

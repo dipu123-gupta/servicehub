@@ -8,14 +8,16 @@ import {
   startWork,
   completeJob,
 } from "../../features/providerJobs/providerJobs.slice";
-
 import JobTimeline from "../../components/JobTimeline";
+import { rejectJob } from "../../features/providerJobs/providerJobs.slice";
 
 const ProviderDashboard = () => {
   const dispatch = useDispatch();
-  const { list = [], loading, error } = useSelector(
-    (state) => state.providerJobs
-  );
+  const {
+    list = [],
+    loading,
+    error,
+  } = useSelector((state) => state.providerJobs);
 
   const [otpInput, setOtpInput] = useState({});
 
@@ -44,9 +46,7 @@ const ProviderDashboard = () => {
 
       {/* EMPTY */}
       {!loading && !error && list.length === 0 && (
-        <p className="text-center text-gray-500">
-          No jobs assigned
-        </p>
+        <p className="text-center text-gray-500">No jobs assigned</p>
       )}
 
       {/* JOB CARDS */}
@@ -60,9 +60,7 @@ const ProviderDashboard = () => {
                 <h2 className="font-semibold text-lg">
                   {job.serviceId?.title}
                 </h2>
-                <span className="badge badge-outline">
-                  {job.status}
-                </span>
+                <span className="badge badge-outline">{job.status}</span>
               </div>
 
               {/* 🔥 JOB TIMELINE */}
@@ -71,14 +69,21 @@ const ProviderDashboard = () => {
               {/* ACTIONS */}
               <div className="flex flex-wrap gap-2">
                 {job.status === "PROVIDER_ASSIGNED" && (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() =>
-                      dispatch(acceptJob(job._id))
-                    }
-                  >
-                    Accept Job
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => dispatch(acceptJob(job._id))}
+                    >
+                      Accept
+                    </button>
+
+                    <button
+                      className="btn btn-error btn-outline btn-sm"
+                      onClick={() => dispatch(rejectJob(job._id))}
+                    >
+                      Reject
+                    </button>
+                  </div>
                 )}
 
                 {job.status === "ACCEPTED" && (
@@ -102,7 +107,7 @@ const ProviderDashboard = () => {
                           verifyOtp({
                             id: job._id,
                             otp: otpInput[job._id],
-                          })
+                          }),
                         )
                       }
                     >
@@ -114,9 +119,7 @@ const ProviderDashboard = () => {
                 {job.status === "OTP_VERIFIED" && (
                   <button
                     className="btn btn-info btn-sm"
-                    onClick={() =>
-                      dispatch(startWork(job._id))
-                    }
+                    onClick={() => dispatch(startWork(job._id))}
                   >
                     Start Work
                   </button>
@@ -125,9 +128,7 @@ const ProviderDashboard = () => {
                 {job.status === "WORK_STARTED" && (
                   <button
                     className="btn btn-success btn-sm"
-                    onClick={() =>
-                      dispatch(completeJob(job._id))
-                    }
+                    onClick={() => dispatch(completeJob(job._id))}
                   >
                     Complete Job
                   </button>
