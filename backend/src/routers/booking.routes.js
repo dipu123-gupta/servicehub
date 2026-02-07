@@ -78,8 +78,10 @@ import express from "express";
 import protect from "../middlewares/auth.middleware.js";
 import { isUser } from "../middlewares/role.middleware.js";
 import validateParams from "../middlewares/validateParams.middleware.js";
-import { bookingIdParamSchema } from "../validations/provider.validation.js";
+// import { bookingIdParamSchema } from "../validations/provider.validation.js";
 import upload from "../middlewares/multer.middleware.js"; // ✅ FIX
+import { bookingIdParamSchema } from "../validations/booking.validation.js";
+
 
 import {
   getUserBookings,

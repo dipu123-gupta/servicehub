@@ -44,15 +44,19 @@ export const withdrawRequest = async (req, res, next) => {
 
     if (pendingRequest) {
       return next(
-        new AppError("You already have a pending withdraw request", 400)
+        new AppError("You already have a pending withdraw request", 400),
       );
     }
 
     // ✅ UC STYLE: REQUEST CREATE
-    await WithdrawRequest.create({
+    const existing = await WithdrawRequest.findOne({
       providerId: req.user.id,
-      amount,
+      status: "PENDING",
     });
+
+    if (existing) {
+      return next(new AppError("Pending withdraw already exists", 400));
+    }
 
     res.status(200).json({
       success: true,
