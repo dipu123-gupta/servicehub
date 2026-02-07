@@ -230,3 +230,11 @@ export const resetPassword = async (req, res, next) => {
   }
 };
 
+
+export const getMe = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    role: req.user.role,
+  });
+};
+
