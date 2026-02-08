@@ -77,7 +77,11 @@ export const registerProvider = async (req, res, next) => {
 /* ================= LOGIN (USER / PROVIDER) ================= */
 export const login = async (req, res, next) => {
   try {
+    console.log("LOGIN BODY =>", req.body);
+
     const { email, password, role } = req.body;
+    console.log("LOGIN BODY =>", req.body);
+
 
     if (!email || !password || !role) {
       return next(new AppError("All fields are required", 400));
