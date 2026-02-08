@@ -22,8 +22,10 @@ const ProviderDashboard = () => {
   const [otpInput, setOtpInput] = useState({});
 
   useEffect(() => {
-    dispatch(fetchProviderJobs());
-  }, [dispatch]);
+    if (!list.length) {
+      dispatch(fetchProviderJobs());
+    }
+  }, [dispatch, list.length]);
 
   return (
     <div className="space-y-6">

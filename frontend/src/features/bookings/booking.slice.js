@@ -4,6 +4,7 @@ import {
   getBookingByIdApi,
   cancelBookingApi,
   uploadBookingMediaApi,
+  createBookingApi,
 } from "./booking.api";
 
 /* FETCH USER BOOKINGS */
@@ -54,6 +55,17 @@ export const uploadBookingMedia = createAsyncThunk(
   },
 );
 
+export const createBooking = createAsyncThunk(
+  "bookings/create",
+  async (data, { rejectWithValue }) => {
+    try {
+      return await createBookingApi(data);
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
+    }
+  },
+);
+
 const bookingSlice = createSlice({
   name: "bookings",
   initialState: {
@@ -97,10 +109,17 @@ const bookingSlice = createSlice({
       })
 
       /* CANCEL */
-      .addCase(cancelBooking.fulfilled, (s, a) => {
-        s.list = s.list.map((b) =>
-          b._id === a.meta.arg.id ? { ...b, status: "CANCELLED" } : b,
+      .addCase(cancelBooking.fulfilled, (state, action) => {
+        state.list = state.list.map((b) =>
+          b._id === action.meta.arg.id ? { ...b, status: "CANCELLED" } : b,
         );
+
+        if (state.selected && state.selected._id === action.meta.arg.id) {
+          state.selected.status = "CANCELLED";
+        }
+      })
+      .addCase(cancelBooking.rejected, (state, action) => {
+        state.error = action.payload;
       })
 
       /* UPLOAD MEDIA */
@@ -115,6 +134,16 @@ const bookingSlice = createSlice({
       })
       .addCase(uploadBookingMedia.rejected, (s, a) => {
         s.uploadLoading = false;
+        s.error = a.payload;
+      })
+      .addCase(createBooking.pending, (s) => {
+        s.loading = true;
+      })
+      .addCase(createBooking.fulfilled, (s) => {
+        s.loading = false;
+      })
+      .addCase(createBooking.rejected, (s, a) => {
+        s.loading = false;
         s.error = a.payload;
       });
   },

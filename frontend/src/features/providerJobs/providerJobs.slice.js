@@ -7,6 +7,7 @@ import {
   completeJobApi,
   rejectJobApi,
   getJobHistoryApi,
+  // getJobHistoryApi,
 } from "./providerJobs.api";
 
 /* THUNKS */
@@ -80,13 +81,12 @@ export const fetchJobHistory = createAsyncThunk(
   "providerJobs/history",
   async (_, { rejectWithValue }) => {
     try {
-      return await getProviderJobHistoryApi();
+      return await getJobHistoryApi();
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
-
 
 const slice = createSlice({
   name: "providerJobs",

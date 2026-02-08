@@ -19,6 +19,11 @@ import NotificationsPage from "./pages/common/Notifications.page.jsx";
 import WithdrawRequestsPage from "./pages/admin/WithdrawRequests.page.jsx";
 import JobHistoryPage from "./pages/provider/JobHistory.page.jsx";
 import PaymentsPage from "./pages/admin/Payments.page.jsx";
+import RegisterPage from "./pages/auth/Register.page.jsx";
+import UserProfilePage from "./pages/user/UserProfile.page.jsx";
+import ChangePasswordPage from "./pages/user/ChangePassword.page.jsx";
+import ProviderProfilePage from "./pages/provider/ProviderProfile.page.jsx";
+import CreateBookingPage from "./pages/user/CreateBooking.page.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,11 +35,13 @@ const App = () => {
   return (
     <Routes>
       {/* ROOT */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
 
       {/* PUBLIC (login) */}
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/register" element={<RegisterPage />} /> */}
+        <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       {/* PROTECTED */}
@@ -46,6 +53,12 @@ const App = () => {
           <Route path="/user" element={<UserLayout />}>
             <Route path="dashboard" element={<UserDashboard />} />
             <Route path="bookings/:id" element={<BookingDetailPage />} />{" "}
+            <Route path="/user/profile" element={<UserProfilePage />} />
+            <Route path="/user/change-password" element={<ChangePasswordPage />} />
+            <Route path="book" element={<CreateBookingPage />} />
+
+
+
             {/* ✅ */}
           </Route>
         </Route>
@@ -56,6 +69,7 @@ const App = () => {
             <Route path="dashboard" element={<ProviderDashboard />} />
             <Route path="/provider/wallet" element={<WalletPage />} />
             <Route path="/provider/history" element={<JobHistoryPage />} />
+            <Route path="/provider/profile" element={<ProviderProfilePage/>} />
 
           </Route>
         </Route>

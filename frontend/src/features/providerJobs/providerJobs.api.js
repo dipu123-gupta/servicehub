@@ -30,11 +30,13 @@ export const rejectJobApi = async (id) => {
   return res.data;
 };
 
-// ✅ JOB HISTORY
-export const getProviderJobHistoryApi = async () => {
+/* JOB HISTORY */
+export const getJobHistoryApi = async () => {
   const res = await api.get("/provider/bookings/history");
   return res.data;
 };
+
+
 
 
 

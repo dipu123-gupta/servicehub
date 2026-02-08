@@ -5,6 +5,7 @@ import { ROLES } from "../features/auth/auth.types";
 const PublicRoute = () => {
   const { isAuthenticated, role, loading } = useAuth();
 
+  // 🔥 IMPORTANT
   if (loading) return null;
 
   if (isAuthenticated) {
@@ -13,6 +14,7 @@ const PublicRoute = () => {
     if (role === ROLES.ADMIN) return <Navigate to="/admin/dashboard" replace />;
   }
 
+  // ✅ LOGIN & REGISTER allowed
   return <Outlet />;
 };
 

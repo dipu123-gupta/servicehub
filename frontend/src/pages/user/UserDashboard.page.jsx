@@ -41,9 +41,16 @@ const UserDashboard = () => {
   const [cancelId, setCancelId] = useState(null);
   const [reason, setReason] = useState("");
 
+  // useEffect(() => {
+  //   dispatch(fetchMyBookings());
+  // }, [dispatch]);
+
   useEffect(() => {
+  if (!list.length) {
     dispatch(fetchMyBookings());
-  }, [dispatch]);
+  }
+}, [dispatch, list.length]);
+
 
   return (
     <div className="space-y-6">

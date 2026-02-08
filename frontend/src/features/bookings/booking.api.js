@@ -11,6 +11,7 @@ export const getBookingByIdApi = async (id) => {
   return res.data;
 };
 
+/* CANCEL BOOKING */
 export const cancelBookingApi = async ({ id, reason }) => {
   const res = await api.patch(`/bookings/${id}/cancel`, { reason });
   return res.data;
@@ -27,3 +28,10 @@ export const uploadBookingMediaApi = async ({ id, file }) => {
 
   return res.data;
 };
+
+/* CREATE BOOKING */
+export const createBookingApi = async (data) => {
+  const res = await api.post("/bookings", data);
+  return res.data;
+};
+

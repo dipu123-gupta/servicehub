@@ -1,15 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+
+import {
+  fetchBookingById,
+  clearSelectedBooking,
+  cancelBooking,
+} from "../../features/bookings/booking.slice";
+
 import {
   generateInvoice,
   downloadInvoice,
 } from "../../features/invoice/invoice.slice";
-import {
-  fetchBookingById,
-  clearSelectedBooking,
-} from "../../features/bookings/booking.slice";
-import { cancelBooking } from "../../features/bookings/booking.slice";
+
 import UploadBookingMedia from "../../components/UploadBookingMedia";
 
 /* ================= HELPERS ================= */
@@ -43,6 +46,7 @@ const BookingDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [cancelReason, setCancelReason] = useState("");
   const [showCancel, setShowCancel] = useState(false);
 
@@ -52,14 +56,15 @@ const BookingDetailPage = () => {
     error,
   } = useSelector((state) => state.bookings);
 
-  const { current: invoice, loading: invoiceLoading } = useSelector(
-    (state) => state.invoice,
-  );
+  const {
+    current: invoice,
+    loading: invoiceLoading,
+  } = useSelector((state) => state.invoice);
 
+  /* FETCH BOOKING */
   useEffect(() => {
     dispatch(fetchBookingById(id));
 
-    // cleanup on unmount
     return () => {
       dispatch(clearSelectedBooking());
     };
@@ -85,18 +90,35 @@ const BookingDetailPage = () => {
 
   if (!booking) return null;
 
+  /* CANCEL HANDLER */
+  const handleCancel = async () => {
+    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+
+    await dispatch(
+      cancelBooking({
+        id: booking._id,
+        reason: cancelReason || "User cancelled",
+      })
+    );
+
+    setShowCancel(false);
+  };
+
   return (
     <div className="space-y-6">
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Booking Details</h1>
-        <button className="btn btn-sm btn-outline" onClick={() => navigate(-1)}>
+        <button
+          className="btn btn-sm btn-outline"
+          onClick={() => navigate(-1)}
+        >
           ← Back
         </button>
       </div>
 
       {/* UPLOAD MEDIA */}
-      {booking.status !== "CANCELLED" && booking.status !== "COMPLETED" && (
+      {!["CANCELLED", "COMPLETED"].includes(booking.status) && (
         <UploadBookingMedia bookingId={booking._id} />
       )}
 
@@ -134,7 +156,6 @@ const BookingDetailPage = () => {
             </div>
           </div>
 
-          {/* PROBLEM DESCRIPTION */}
           {booking.problemDescription && (
             <div>
               <p className="font-medium mb-1">Problem Description</p>
@@ -144,41 +165,15 @@ const BookingDetailPage = () => {
         </div>
       </div>
 
-      {/* ================= INVOICE ================= */}
-      {booking.status === "COMPLETED" && (
+      {/* CANCEL BOOKING */}
+      {!["WORK_STARTED", "COMPLETED", "CANCELLED"].includes(
+        booking.status
+      ) && (
         <div className="card bg-base-100 shadow">
           <div className="card-body space-y-3">
-            <h3 className="text-lg font-semibold">Invoice</h3>
-
-            {/* GENERATE */}
-            {!invoice && (
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={() => dispatch(generateInvoice(booking._id))}
-                disabled={invoiceLoading}
-              >
-                {invoiceLoading ? "Generating..." : "Generate Invoice"}
-              </button>
-            )}
-
-            {/* DOWNLOAD */}
-            {invoice && (
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={() => dispatch(downloadInvoice(invoice._id))}
-              >
-                Download Invoice (PDF)
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ================= CANCEL BOOKING ================= */}
-      {!["WORK_STARTED", "COMPLETED", "CANCELLED"].includes(booking.status) && (
-        <div className="card bg-base-100 shadow">
-          <div className="card-body space-y-3">
-            <h3 className="text-lg font-semibold text-error">Cancel Booking</h3>
+            <h3 className="text-lg font-semibold text-error">
+              Cancel Booking
+            </h3>
 
             {!showCancel ? (
               <button
@@ -199,14 +194,7 @@ const BookingDetailPage = () => {
                 <div className="flex gap-2">
                   <button
                     className="btn btn-error btn-sm"
-                    onClick={() => {
-                      dispatch(
-                        cancelBooking({
-                          id: booking._id,
-                          reason: cancelReason,
-                        }),
-                      );
-                    }}
+                    onClick={handleCancel}
                   >
                     Confirm Cancel
                   </button>
@@ -219,6 +207,34 @@ const BookingDetailPage = () => {
                   </button>
                 </div>
               </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* INVOICE */}
+      {booking.status === "COMPLETED" && (
+        <div className="card bg-base-100 shadow">
+          <div className="card-body space-y-3">
+            <h3 className="text-lg font-semibold">Invoice</h3>
+
+            {!invoice && (
+              <button
+                className="btn btn-primary btn-sm"
+                disabled={invoiceLoading}
+                onClick={() => dispatch(generateInvoice(booking._id))}
+              >
+                {invoiceLoading ? "Generating..." : "Generate Invoice"}
+              </button>
+            )}
+
+            {invoice && (
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={() => dispatch(downloadInvoice(invoice._id))}
+              >
+                Download Invoice (PDF)
+              </button>
             )}
           </div>
         </div>

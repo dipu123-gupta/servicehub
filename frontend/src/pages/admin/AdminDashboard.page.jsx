@@ -10,10 +10,18 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { stats, providers, loading } = useSelector((s) => s.admin);
 
+  // useEffect(() => {
+  //   dispatch(fetchDashboard());
+  //   dispatch(fetchProviders());
+  // }, [dispatch]);
+
   useEffect(() => {
+  if (!list.length) {
     dispatch(fetchDashboard());
     dispatch(fetchProviders());
-  }, [dispatch]);
+  }
+}, [dispatch, list.length]);
+
 
   return (
     <div className="space-y-8">
